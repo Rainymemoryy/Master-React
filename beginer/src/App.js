@@ -1,12 +1,5 @@
-import style from './App.module.css'
-import User from './class_component/User'
-
 function App() {
-    return (
-        <div className={style.App}>
-            <User />
-        </div>
-    )
+    return <div className='App'></div>
 }
 
 export default App
