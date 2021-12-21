@@ -1,9 +1,9 @@
-import './App.css'
+import style from './App.module.css'
 import User from './class_component/User'
 
 function App() {
     return (
-        <div className='App'>
+        <div className={style.App}>
             <User />
         </div>
     )

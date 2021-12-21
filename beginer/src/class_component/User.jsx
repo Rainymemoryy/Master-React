@@ -40,14 +40,6 @@ export default function User() {
                 <input value={value} onChange={handleChange} />
             </form>
             <TodoList todos={todos} handleDelete={handleDelete} />
-            {/* <ul>
-                {todos.map(todo => (
-                    <li key={todo.id}>
-                        <span>{todo.value}</span>
-                        <button onClick={() => handleDelete(todo.id)}>x</button>
-                    </li>
-                ))}
-            </ul> */}
         </div>
     )
 }
