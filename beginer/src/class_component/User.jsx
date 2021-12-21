@@ -1,22 +1,53 @@
-import React, { useMemo, useState } from 'react'
-import Userprofile from './Userprofile'
+import React, { useReducer, useState } from 'react'
+import TodoList from './TodoList'
+
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'submit':
+            return [
+                ...state,
+                {
+                    value: action.payload,
+                    id: new Date().toISOString()
+                }
+            ]
+        case 'delete':
+            return state.filter(todo => todo.id !== action.payload)
+        default:
+            return state
+    }
+}
 
 export default function User() {
-    const [count, setCount] = useState(0)
-    const profile = useMemo(() => {
-        console.log('Cre')
-        return {
-            name: 'Khang',
-            age: count
-        }
-    }, [count])
-    console.log('User')
+    const [value, setValue] = useState('')
+    const [todos, dispatch] = useReducer(reducer, [])
+
+    const handleChange = event => {
+        setValue(event.target.value)
+    }
+    const handleSubmit = event => {
+        event.preventDefault()
+        dispatch({ type: 'submit', payload: value })
+        setValue('')
+    }
+
+    const handleDelete = id => dispatch({ type: 'delete', payload: id })
 
     return (
         <div>
-            <div>User</div>
-            <button onClick={() => setCount(pre => pre + 1)}>Change count ({count})</button>
-            <Userprofile data={count} profile={profile} />
+            <h1>Simple todo list</h1>
+            <form onSubmit={handleSubmit}>
+                <input value={value} onChange={handleChange} />
+            </form>
+            <TodoList todos={todos} handleDelete={handleDelete} />
+            {/* <ul>
+                {todos.map(todo => (
+                    <li key={todo.id}>
+                        <span>{todo.value}</span>
+                        <button onClick={() => handleDelete(todo.id)}>x</button>
+                    </li>
+                ))}
+            </ul> */}
         </div>
     )
 }
