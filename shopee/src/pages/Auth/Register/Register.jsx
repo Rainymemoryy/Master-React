@@ -1,13 +1,15 @@
+import { unwrapResult } from '@reduxjs/toolkit'
 import React from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from 'src/assets/styles/utils'
 import ErrorMessage from 'src/components/ErrorMessage/ErrorMessage'
-import { Message } from 'src/components/ErrorMessage/errorMessage.style'
 import InputPassword from 'src/components/InputPassword/InputPassword'
 import InputText from 'src/components/InputText/InputText'
 import { path } from 'src/constants/path'
 import { rules } from 'src/constants/rules'
+import { register } from '../auth.slice'
 
 import * as S from './register.style'
 
@@ -16,7 +18,8 @@ export default function Register() {
         control,
         handleSubmit,
         getValues,
-        formState: { errors }
+        formState: { errors },
+        setError
     } = useForm({
         defaultValues: {
             email: '',
@@ -25,11 +28,31 @@ export default function Register() {
         }
     })
 
-    const handleRegister = data => {
-        console.log(data)
-    }
+    const dispatch = useDispatch()
+    const history = useNavigate()
 
-    console.log(errors)
+    const handleRegister = async data => {
+        const body = {
+            email: data.email,
+            password: data.password
+        }
+        console.log(body)
+
+        try {
+            const res = await dispatch(register(body))
+            unwrapResult(res)
+            history(path.home)
+        } catch (error) {
+            if (error.status === 422) {
+                for (const key in error.data) {
+                    setError(key, {
+                        type: 'sever',
+                        message: error.data[key]
+                    })
+                }
+            }
+        }
+    }
 
     return (
         <S.StyledRegister>
