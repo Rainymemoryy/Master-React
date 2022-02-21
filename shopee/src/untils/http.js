@@ -1,6 +1,4 @@
 import axios from 'axios'
-import { configs } from 'eslint-plugin-prettier'
-import { get } from 'lodash'
 import LocalStorage from 'src/constants/localStorage'
 
 class Http {
@@ -42,7 +40,7 @@ class Http {
     }
 
     post(url, data, config = null) {
-        return this.instance.post(data, config)
+        return this.instance.post(url, data, config)
     }
 
     put(url, data, config = null) {

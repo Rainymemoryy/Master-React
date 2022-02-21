@@ -1,5 +1,5 @@
 import { unwrapResult } from '@reduxjs/toolkit'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
@@ -9,8 +9,8 @@ import InputPassword from 'src/components/InputPassword/InputPassword'
 import InputText from 'src/components/InputText/InputText'
 import { path } from 'src/constants/path'
 import { rules } from 'src/constants/rules'
+import http from 'src/untils/http'
 import { register } from '../auth.slice'
-
 import * as S from './register.style'
 
 export default function Register() {
@@ -36,7 +36,6 @@ export default function Register() {
             email: data.email,
             password: data.password
         }
-        console.log(body)
 
         try {
             const res = await dispatch(register(body))
@@ -44,6 +43,7 @@ export default function Register() {
             history(path.home)
         } catch (error) {
             if (error.status === 422) {
+                console.log(error)
                 for (const key in error.data) {
                     setError(key, {
                         type: 'sever',
@@ -88,7 +88,7 @@ export default function Register() {
                                         name='password'
                                         placeholder='Mật khẩu'
                                         onChange={field.onChange}
-                                        value={getValues('password')}
+                                        value={getValues('password') || ''}
                                     />
                                 )}
                             />
@@ -109,7 +109,7 @@ export default function Register() {
                                         name='confirmedPassword'
                                         placeholder='Nhập lại mật khẩu'
                                         onChange={field.onChange}
-                                        value={getValues('confirmedPassword')}
+                                        value={getValues('confirmedPassword') || ''}
                                     />
                                 )}
                             />
