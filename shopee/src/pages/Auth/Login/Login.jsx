@@ -9,6 +9,7 @@ import InputPassword from 'src/components/InputPassword/InputPassword'
 import InputText from 'src/components/InputText/InputText'
 import { path } from 'src/constants/path'
 import { rules } from 'src/constants/rules'
+import { login } from '../auth.slice'
 import * as S from '../Register/register.style'
 
 export default function Login() {
@@ -25,8 +26,30 @@ export default function Login() {
         }
     })
 
+    const dispatch = useDispatch()
+    const history = useNavigate()
+
     const handleLogin = async data => {
-        console.log(data)
+        const body = {
+            email: data.email,
+            password: data.password
+        }
+
+        try {
+            const res = await dispatch(login(body))
+            unwrapResult(res)
+            history(path.home)
+        } catch (error) {
+            if (error.status === 422) {
+                console.log(error)
+                for (const key in error.data) {
+                    setError(key, {
+                        type: 'sever',
+                        message: error.data[key]
+                    })
+                }
+            }
+        }
     }
 
     return (
