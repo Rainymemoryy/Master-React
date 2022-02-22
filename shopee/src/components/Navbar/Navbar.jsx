@@ -1,16 +1,17 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment } from 'react'
 import * as S from './navbar.style'
 import { useAuthenticated } from 'src/hooks/useAuthenticated'
 import { useSelector } from 'react-redux'
 import { path } from 'src/constants/path'
+import usePopover from 'src/hooks/usePopover'
+import Popover from '../Popover/Popover'
 
 export default function Navbar() {
-    const [activePopover, setActivePopover] = useState(false)
     const authenticated = useAuthenticated()
     const profile = useSelector(state => state.auth.profile)
 
-    const showPopover = () => setActivePopover(true)
-    const hidePopover = () => setActivePopover(false)
+    const { activePopover, showPopover, hidePopover } = usePopover()
+
     return (
         <S.Navbar>
             <S.NavMenu>
@@ -19,16 +20,12 @@ export default function Navbar() {
                         <S.User onMouseEnter={showPopover} onMouseLeave={hidePopover}>
                             <S.UserImage src='https://cf.shopee.vn/file/bbe4831308307c44b638058a3e735181_tn' />
                             <S.UserName>{profile.name || profile.email}</S.UserName>
-                            {activePopover && (
-                                <S.Drawer>
-                                    <S.PopoverArrow />
-                                    <S.PopoverContent>
-                                        <S.UserLink to=''>Tài khoản của tôi</S.UserLink>
-                                        <S.UserLink to=''>Đơn mua</S.UserLink>
-                                        <S.UserButton>Đăng xuất</S.UserButton>
-                                    </S.PopoverContent>
-                                </S.Drawer>
-                            )}
+
+                            <Popover active={activePopover}>
+                                <S.UserLink to=''>Tài khoản của tôi</S.UserLink>
+                                <S.UserLink to=''>Đơn mua</S.UserLink>
+                                <S.UserButton>Đăng xuất</S.UserButton>
+                            </Popover>
                         </S.User>
                     </li>
                 )}
