@@ -1,14 +1,14 @@
 import styled, { keyframes } from 'styled-components'
 
 export const PopoverEnterAnimation = keyframes`
-0%{
-    transform: scale(0);
-    opacity: 0;
-}
-to{
-    transform: scale(1);
-    opacity: 1;
-}
+    0%{
+        transform: scale(0);
+        opacity: 0;
+    }
+    to{
+        transform: scale(1);
+        opacity: 1;
+    }
 `
 
 export const Drawer = styled.div`
