@@ -76,3 +76,8 @@ export const ButtonControler = styled.button`
 `
 export const ButtonControlerPrev = styled(ButtonControler)``
 export const ButtonControlerNext = styled(ButtonControler)``
+
+export const ProductList = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+`
