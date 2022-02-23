@@ -17,7 +17,7 @@ export const ProductItem = styled.div`
         transform: translateY(-0.0625rem);
     }
 `
-export const ProductItemImg = styled.div`
+export const ProductItemImage = styled.div`
     width: 100%;
     padding-top: 100%;
     position: relative;
