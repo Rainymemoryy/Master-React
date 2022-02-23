@@ -1,10 +1,18 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { path } from 'src/constants/path'
 import RatingStar from '../RatingStar/RatingStar'
 import * as S from './filterPanel.style'
+import PropTypes from 'prop-types'
+import qs from 'query-string'
 
-export default function FilterPanel() {
+export default function FilterPanel({ categories }) {
+    const location = useLocation()
+
+    const handleActiveClassCategoryItem = category => {
+        const query = qs.parse(location.search)
+        return query.category === category._id ? 'active' : ''
+    }
     return (
         <div>
             <S.CategoryTitleLink to={path.home}>
@@ -23,15 +31,16 @@ export default function FilterPanel() {
             </S.CategoryTitleLink>
 
             <S.CategoryList>
-                <S.CategoryItem>
-                    <NavLink to=''>Quần áo</NavLink>
-                </S.CategoryItem>
-                <S.CategoryItem>
-                    <NavLink to=''>Quần áo</NavLink>
-                </S.CategoryItem>
-                <S.CategoryItem>
-                    <NavLink to=''>Quần áo</NavLink>
-                </S.CategoryItem>
+                {categories.map(category => (
+                    <S.CategoryItem key={category._id}>
+                        <Link
+                            to={path.home + `?category=${category._id}`}
+                            className={handleActiveClassCategoryItem(category)}
+                        >
+                            {category.name}
+                        </Link>
+                    </S.CategoryItem>
+                ))}
             </S.CategoryList>
 
             <S.CategoryTitle>
@@ -70,4 +79,8 @@ export default function FilterPanel() {
             <S.RemoveFilterButton>Xoá tất cả</S.RemoveFilterButton>
         </div>
     )
+}
+
+FilterPanel.prototype = {
+    categories: PropTypes.array.isRequired
 }
