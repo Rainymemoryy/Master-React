@@ -9,7 +9,11 @@ import * as S from './home.style'
 
 export default function Home() {
     const [categories, setCategories] = useState([])
-    const [products, setProducts] = useState({})
+    const [products, setProducts] = useState({
+        products: [],
+        pagination: {}
+    })
+
     const [filters, setFilters] = useState({})
 
     const dispatch = useDispatch()
@@ -27,7 +31,8 @@ export default function Home() {
         const _filters = {
             ...query,
             page: query.page || 1,
-            limit: query.limit || 30
+            limit: query.limit || 30,
+            sortBy: query.sortBy || 'view'
         }
         setFilters(_filters)
 
@@ -38,7 +43,9 @@ export default function Home() {
             exclude: _filters.exclude, //nội trừ
             rating_filter: _filters.rating,
             price_max: _filters.maxPrice,
-            price_min: _filters.minPrice
+            price_min: _filters.minPrice,
+            order: _filters.order,
+            sort_by: _filters.sortBy
         }
 
         const _getProducts = async () => {
@@ -47,13 +54,6 @@ export default function Home() {
             setProducts(res.data)
         }
         _getProducts()
-
-        // IIFE
-        // ;(async () => {
-        //     const data = await dispatch(getProducts())
-        //     const res = unwrapResult(data)
-        //     setProducts(res.data)
-        // })()
     }, [query, dispatch])
 
     return (
@@ -63,7 +63,7 @@ export default function Home() {
                     <FilterPanel categories={categories} filters={filters} />
                 </S.Side>
                 <S.Main>
-                    <SearchItemResult products={products} />
+                    <SearchItemResult products={products} filters={filters} />
                 </S.Main>
             </S.Container>
         </div>
