@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { path } from 'src/constants/path'
 import qs from 'query-string'
 import classNames from 'classnames'
+
 export default function SearchItemResult({ products, filters }) {
     const { products: productList, pagination } = products
     const history = useNavigate()
@@ -109,7 +110,7 @@ export default function SearchItemResult({ products, filters }) {
                 </S.ProductList>
             )}
 
-            <Pagination />
+            <Pagination pagination={pagination} filters={filters} />
         </div>
     )
 }
