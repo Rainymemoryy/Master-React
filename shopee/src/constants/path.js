@@ -4,6 +4,5 @@ export const path = {
     register: '/register',
     user: '/user',
     product: '/product',
-    productDetail: '/product/:iDProduct',
     notFound: '*'
 }
