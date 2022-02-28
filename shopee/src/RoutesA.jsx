@@ -9,6 +9,7 @@ import Login from './pages/Auth/Login/Login'
 import Register from './pages/Auth/Register/Register'
 import Home from './pages/Home/Home'
 import NotFound from './pages/NotFound/NotFound'
+import ProductDetail from './pages/ProductDetail/ProductDetail'
 import User from './pages/User/User'
 
 export default function RoutesA() {
@@ -19,6 +20,14 @@ export default function RoutesA() {
                 element={
                     <MainLayout>
                         <Home />
+                    </MainLayout>
+                }
+            ></Route>
+            <Route
+                path={path.productDetail}
+                element={
+                    <MainLayout>
+                        <ProductDetail />
                     </MainLayout>
                 }
             ></Route>
