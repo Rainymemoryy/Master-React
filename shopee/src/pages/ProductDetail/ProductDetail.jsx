@@ -4,10 +4,11 @@ import DOMPurify from 'dompurify'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import ProductQuantityController from 'src/components/ProductQuantityController/ProductQuantityController'
 import ProductRating from 'src/components/ProductRating/ProductRating'
 import { formatK, formatMoney, getIdFromNameId, rateSale } from 'src/untils/helper'
-import { getProductDetail } from './productDetail.slice'
+import { addToCard, getProductDetail } from './productDetail.slice'
 import * as S from './productDetail.style'
 
 export default function ProductDetail() {
@@ -38,6 +39,23 @@ export default function ProductDetail() {
     }
 
     const handleChangeQuantity = value => setQuantity(value)
+
+    const handleAddToCard = () => {
+        if (product._id) {
+            const body = {
+                product_id: product._id,
+                buy_count: quantity
+            }
+            dispatch(addToCard(body))
+                .then(unwrapResult)
+                .then(res => {
+                    toast.success(res.message, {
+                        position: 'bottom-right',
+                        autoClose: 2000
+                    })
+                })
+        }
+    }
 
     useEffect(() => {
         const realId = getIdFromNameId(iDProduct)
@@ -143,7 +161,7 @@ export default function ProductDetail() {
                                     {product.quantity} sản phẩm có sẵn
                                 </S.ProductBuyQuantityQuantity>
                             </S.ProductBuyQuantity>
-                            <S.ProductButtons>
+                            <S.ProductButtons onClick={handleAddToCard}>
                                 <svg
                                     enableBackground='new 0 0 15 15'
                                     viewBox='0 0 15 15'
