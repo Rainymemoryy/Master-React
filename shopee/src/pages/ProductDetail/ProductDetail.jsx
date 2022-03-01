@@ -1,6 +1,7 @@
 import { unwrapResult } from '@reduxjs/toolkit'
+import classNames from 'classnames'
 import DOMPurify from 'dompurify'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import ProductQuantityController from 'src/components/ProductQuantityController/ProductQuantityController'
@@ -13,8 +14,27 @@ export default function ProductDetail() {
     const [product, setProduct] = useState()
     const dispatch = useDispatch()
     const { iDProduct } = useParams()
+    const [currentImage, setCurrentImage] = useState({})
+    const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
 
-    console.log(useParams())
+    const currentImages = useMemo(() => {
+        if (product) return product.images.slice(...currentIndexImages)
+        return []
+    }, [product, currentIndexImages])
+
+    const chooseCurrent = image => setCurrentImage(image)
+
+    const choosePrev = () => {
+        if (currentIndexImages[0] > 0) {
+            setCurrentIndexImages(currentIndexImages => [currentIndexImages[0] - 1, currentIndexImages[1] - 1])
+        }
+    }
+    const chooseNext = () => {
+        if (currentIndexImages[1] < product.images.length) {
+            setCurrentIndexImages(currentIndexImages => [currentIndexImages[0] + 1, currentIndexImages[1] + 1])
+        }
+    }
+
     useEffect(() => {
         const realId = getIdFromNameId(iDProduct)
         dispatch(getProductDetail(realId))
@@ -26,10 +46,9 @@ export default function ProductDetail() {
                         id: index
                     }
                 })
-
+                setCurrentImage(res.data.images[0])
                 setProduct(res.data)
             })
-        console.log(realId)
     }, [iDProduct, dispatch])
 
     return (
@@ -39,11 +58,11 @@ export default function ProductDetail() {
                     <S.ProductBriefing>
                         <S.ProductImages>
                             <S.ProductImageActive>
-                                <img src={product.image} alt='' />
+                                <img src={currentImage.url} alt='' />
                             </S.ProductImageActive>
 
                             <S.ProductImageSlider>
-                                <S.ProductIconButtonPrev>
+                                <S.ProductIconButtonPrev onClick={choosePrev} disabled={currentIndexImages[0] <= 0}>
                                     <svg
                                         enableBackground='new 0 0 13 20'
                                         viewBox='0 0 13 20'
@@ -55,16 +74,24 @@ export default function ProductDetail() {
                                     </svg>
                                 </S.ProductIconButtonPrev>
 
-                                {product.images.map((image, index) => {
-                                    console.log(image)
+                                {currentImages.map(image => {
                                     return (
-                                        <S.ProductImage key={index}>
-                                            <img src={image.url} alt=''></img>
+                                        <S.ProductImage key={image.id}>
+                                            <img
+                                                src={image.url}
+                                                alt=''
+                                                onMouseEnter={() => chooseCurrent(image)}
+                                                // active={image.id === currentImage.id}
+                                                className={classNames({ active: image.id === currentImage.id })}
+                                            ></img>
                                         </S.ProductImage>
                                     )
                                 })}
 
-                                <S.ProductIconButtonNext>
+                                <S.ProductIconButtonNext
+                                    onClick={chooseNext}
+                                    disabled={currentIndexImages[1] >= product.images.length}
+                                >
                                     <svg
                                         enableBackground='new 0 0 13 21'
                                         viewBox='0 0 13 21'
@@ -152,6 +179,7 @@ export default function ProductDetail() {
                             </S.ProductButtons>
                         </S.ProductMeta>
                     </S.ProductBriefing>
+
                     <S.ProductContent>
                         <S.ProductContentHeading>MÔ TẢ SẢN PHẨM</S.ProductContentHeading>
                         <S.ProductContentDetail

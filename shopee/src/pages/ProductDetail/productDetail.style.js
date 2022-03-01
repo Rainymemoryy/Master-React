@@ -15,6 +15,7 @@ export const ProductImageActive = styled.div`
     align-items: center;
     justify-content: center;
     margin-bottom: 1.5rem;
+
     img {
         max-width: 100%;
         max-height: 100%;
@@ -58,7 +59,13 @@ export const ProductImage = styled.div`
     img {
         max-width: 100%;
         max-height: 100%;
-        border: 2px solid ${({ active }) => (active ? '#ee4d2d' : 'transparent')};
+
+        /* border: 2px solid ${({ active }) => (active ? '#ee4d2d' : 'transparent')}; */
+
+        border: 2px solid 'transparent';
+        &.active {
+            border: 2px solid #ee4d2d;
+        }
     }
 `
 export const ProductIconButtonNext = styled(ProductIconButton)`

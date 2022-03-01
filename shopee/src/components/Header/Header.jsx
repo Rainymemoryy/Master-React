@@ -24,8 +24,7 @@ export default function Header() {
 
     const search = event => {
         event.preventDefault()
-
-        navigate(path.home + `?$name= ${searchValue}`)
+        navigate(path.home + `?name=${searchValue}`)
     }
 
     return (
