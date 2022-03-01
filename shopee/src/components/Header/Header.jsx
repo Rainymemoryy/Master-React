@@ -32,7 +32,7 @@ export default function Header() {
             <div className='container'>
                 <Navbar />
                 <S.SearchWrap>
-                    <S.Logo to=''>
+                    <S.Logo to={path.home}>
                         <svg
                             viewBox='0 0 192 65'
                             className='shopee-svg-icon header-with-search__shopee-logo icon-shopee-logo'

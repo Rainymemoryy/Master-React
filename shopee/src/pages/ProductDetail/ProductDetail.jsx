@@ -16,6 +16,7 @@ export default function ProductDetail() {
     const { iDProduct } = useParams()
     const [currentImage, setCurrentImage] = useState({})
     const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
+    const [quantity, setQuantity] = useState(1)
 
     const currentImages = useMemo(() => {
         if (product) return product.images.slice(...currentIndexImages)
@@ -29,11 +30,14 @@ export default function ProductDetail() {
             setCurrentIndexImages(currentIndexImages => [currentIndexImages[0] - 1, currentIndexImages[1] - 1])
         }
     }
+
     const chooseNext = () => {
         if (currentIndexImages[1] < product.images.length) {
             setCurrentIndexImages(currentIndexImages => [currentIndexImages[0] + 1, currentIndexImages[1] + 1])
         }
     }
+
+    const handleChangeQuantity = value => setQuantity(value)
 
     useEffect(() => {
         const realId = getIdFromNameId(iDProduct)
@@ -129,7 +133,11 @@ export default function ProductDetail() {
                             <S.ProductBuyQuantity>
                                 <S.ProductBuyQuantityTitle>Số lượng</S.ProductBuyQuantityTitle>
                                 <S.ProductBuyQuantityController>
-                                    <ProductQuantityController />
+                                    <ProductQuantityController
+                                        value={quantity}
+                                        max={product.quantity}
+                                        onChange={handleChangeQuantity}
+                                    />
                                 </S.ProductBuyQuantityController>
                                 <S.ProductBuyQuantityQuantity>
                                     {product.quantity} sản phẩm có sẵn
