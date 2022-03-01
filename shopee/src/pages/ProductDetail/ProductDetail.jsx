@@ -191,6 +191,7 @@ export default function ProductDetail() {
                     <S.ProductContent>
                         <S.ProductContentHeading>MÔ TẢ SẢN PHẨM</S.ProductContentHeading>
                         <S.ProductContentDetail
+                            //render HTML nhưng đã loại bỏ scrip để tránh lỗ hổng xss
                             dangerouslySetInnerHTML={{
                                 __html: DOMPurify.sanitize(product.description)
                             }}
