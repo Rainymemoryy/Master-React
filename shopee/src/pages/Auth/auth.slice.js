@@ -7,6 +7,12 @@ export const register = createAsyncThunk('auth/register', payloadCreator(authApi
 export const login = createAsyncThunk('auth/login', payloadCreator(authApi.login))
 export const logout = createAsyncThunk('auth/logout', payloadCreator(authApi.logout))
 
+const handleUnauth = state => {
+    state.profile = {}
+    localStorage.removeItem(LocalStorage.user)
+    localStorage.removeItem(LocalStorage.accessToken)
+}
+
 const handleAuthFulfilled = (state, action) => {
     const { user, access_token } = action.payload.data
 
@@ -19,16 +25,16 @@ const handleAuthFulfilled = (state, action) => {
 const auth = createSlice({
     name: 'auth',
     initialState: { profile: JSON.parse(localStorage.getItem(LocalStorage.user)) || {} },
+    reducers: {
+        unauthorize: handleUnauth
+    },
     extraReducers: {
         [register.fulfilled]: handleAuthFulfilled,
         [login.fulfilled]: handleAuthFulfilled,
-        [logout.fulfilled]: state => {
-            state.profile = {}
-            localStorage.removeItem(LocalStorage.user)
-            localStorage.removeItem(LocalStorage.accessToken)
-        }
+        [logout.fulfilled]: handleUnauth
     }
 })
 
 const authReducer = auth.reducer
+export const unauthorize = auth.actions.unauthorize
 export default authReducer
