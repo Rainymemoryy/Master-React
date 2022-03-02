@@ -12,6 +12,9 @@ const purchaseApi = {
                 status: purchaseStatus.inCard
             }
         })
+    },
+    updatePurchase(data) {
+        return http.put(`${URL}/update-purchase`, data)
     }
 }
 

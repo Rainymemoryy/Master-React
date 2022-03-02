@@ -4,6 +4,8 @@ import { payloadCreator } from 'src/untils/helper'
 import { logout } from '../Auth/auth.slice'
 
 export const getCartPurchases = createAsyncThunk('cart/getCartPurchases', payloadCreator(purchaseApi.getCardPurchases))
+export const updatePurchase = createAsyncThunk('cart/updatePurchase', payloadCreator(purchaseApi.updatePurchase))
+
 const cart = createSlice({
     name: 'cart',
     initialState: {
