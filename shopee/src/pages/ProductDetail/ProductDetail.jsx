@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import ProductQuantityController from 'src/components/ProductQuantityController/ProductQuantityController'
 import ProductRating from 'src/components/ProductRating/ProductRating'
 import { formatK, formatMoney, getIdFromNameId, rateSale } from 'src/untils/helper'
+import { getCartPurchases } from '../Cart/cart.slice'
 import { addToCard, getProductDetail } from './productDetail.slice'
 import * as S from './productDetail.style'
 
@@ -40,20 +41,20 @@ export default function ProductDetail() {
 
     const handleChangeQuantity = value => setQuantity(value)
 
-    const handleAddToCard = () => {
+    const handleAddToCard = async () => {
         if (product._id) {
             const body = {
                 product_id: product._id,
                 buy_count: quantity
             }
-            dispatch(addToCard(body))
-                .then(unwrapResult)
-                .then(res => {
-                    toast.success(res.message, {
-                        position: 'bottom-right',
-                        autoClose: 2000
-                    })
-                })
+
+            const res = await dispatch(addToCard(body)).then(unwrapResult)
+            await dispatch(getCartPurchases()).then(unwrapResult)
+
+            toast.success(res.message, {
+                position: 'bottom-right',
+                autoClose: 2000
+            })
         }
     }
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { path } from 'src/constants/path'
 import usePopover from 'src/hooks/usePopover'
@@ -12,6 +13,7 @@ export default function Header() {
     const [searchValue, setSearchValue] = useState('')
     const navigate = useNavigate()
     const query = useQuery()
+    const purchases = useSelector(state => state.cart.purchases)
 
     useEffect(() => {
         const { name = '' } = query
@@ -81,20 +83,24 @@ export default function Header() {
                                     <circle cx='19.7' cy={23} r='2.2' stroke='none' />
                                 </svg>
                             </S.CartIcon>
-                            <S.CartNumberBadge>5</S.CartNumberBadge>
+                            {purchases.length > 0 && <S.CartNumberBadge>{purchases.length}</S.CartNumberBadge>}
+
                             <Popover active={activePopover}>
                                 <S.PopoverContent>
                                     <S.PopoverTitle>Sản phẩm mới thêm</S.PopoverTitle>
-                                    <S.MiniProductCard>
-                                        <S.MiniProductCardImg src='https://cf.shopee.vn/file/d9b06c0057250e054c281d55a50f1923_tn' />
-                                        <S.MiniProductCardTitle>
-                                            Chì thiết hàn CARDAS cao cấp có pha bạc
-                                        </S.MiniProductCardTitle>
-                                        <S.MiniProductCardPrice>đ70.000</S.MiniProductCardPrice>
-                                    </S.MiniProductCard>
+                                    {purchases.slice(0, 5).map(purchase => (
+                                        <S.MiniProductCard>
+                                            <S.MiniProductCardImg src={purchase.product.image} />
+                                            <S.MiniProductCardTitle>{purchase.product.name}</S.MiniProductCardTitle>
+                                            <S.MiniProductCardPrice>đ{purchase.product.price}</S.MiniProductCardPrice>
+                                        </S.MiniProductCard>
+                                    ))}
+
                                     <S.PopoverFooter>
                                         <S.MoreProduct>
-                                            <span>1 Thêm hàng vào giỏ</span>
+                                            {purchases.length - 5 > 0 && (
+                                                <span>{purchases.length - 5} sản phẩm khác trong giỏ</span>
+                                            )}
                                         </S.MoreProduct>
                                         <S.ButtonShowCard to=''>Xem giỏ hàng</S.ButtonShowCard>
                                     </S.PopoverFooter>
