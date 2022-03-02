@@ -1,8 +1,10 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import Cart from './pages/Cart/Cart'
 import { path } from './constants/path'
 import AuthenticatedGuard from './guards/AuthenticatedGuard'
 import UnAuthenticatedGuard from './guards/UnAuthenticatedGuard'
+import CartLayout from './layouts/CartLayout/CartLayout'
 import MainLayout from './layouts/MainLayout/MainLayout'
 import RegisterLayout from './layouts/RegisterLayout/RegisterLayout'
 import Login from './pages/Auth/Login/Login'
@@ -23,6 +25,7 @@ export default function RoutesA() {
                     </MainLayout>
                 }
             ></Route>
+
             <Route
                 path={path.productDetail}
                 element={
@@ -31,6 +34,7 @@ export default function RoutesA() {
                     </MainLayout>
                 }
             ></Route>
+
             <Route
                 path={path.login}
                 element={
@@ -52,6 +56,7 @@ export default function RoutesA() {
                     </UnAuthenticatedGuard>
                 }
             ></Route>
+
             <Route
                 path={path.user}
                 element={
@@ -62,6 +67,18 @@ export default function RoutesA() {
                     </AuthenticatedGuard>
                 }
             ></Route>
+
+            <Route
+                path={path.cart}
+                element={
+                    <AuthenticatedGuard>
+                        <CartLayout>
+                            <Cart />
+                        </CartLayout>
+                    </AuthenticatedGuard>
+                }
+            ></Route>
+
             <Route path={path.notFound} element={<NotFound />}></Route>
         </Routes>
     )

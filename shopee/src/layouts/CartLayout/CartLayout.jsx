@@ -1,18 +1,17 @@
 import React from 'react'
 import Footer from 'src/components/Footer/Footer'
-import Header from 'src/components/Header/Header'
+import HeaderCart from 'src/components/HeaderCart/HeaderCart'
 import PropTypes from 'prop-types'
 
-export default function MainLayout({ children }) {
+export default function CartLayout({ children }) {
     return (
         <div>
-            <Header />
+            <HeaderCart />
             {children}
             <Footer />
         </div>
     )
 }
-
-MainLayout.prototype = {
+CartLayout.prototype = {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)])
 }

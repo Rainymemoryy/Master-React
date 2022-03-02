@@ -6,7 +6,7 @@ export default function Footer() {
         <S.Footer>
             <div className='container'>
                 <S.Footer1>
-                    <div>@ 2021 Shopee. ------------------</div>
+                    <div>© 2022 Shopee. Tất cả các quyền được bảo lưu.</div>
                     <S.Language>
                         Ngôn ngữ:
                         <span>Tiếng Việt</span>
