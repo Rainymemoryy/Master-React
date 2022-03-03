@@ -1,12 +1,15 @@
-import { Checkbox } from '@material-ui/core'
 import { createNextState, unwrapResult } from '@reduxjs/toolkit'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
+import Checkbox from 'src/components/Checkbox/Checkbox'
 import ProductQuantityController from 'src/components/ProductQuantityController/ProductQuantityController'
-import { formatMoney } from 'src/untils/helper'
+import { path } from 'src/constants/path'
+import { formatMoney, generateNameId } from 'src/untils/helper'
 import { getCartPurchases, updatePurchase } from './cart.slice'
 import * as S from './cart.style'
+import keyBy from 'lodash/keyBy'
+
 export default function Cart() {
     const dispatch = useDispatch()
     const purchases = useSelector(state => state.cart.purchases)
@@ -20,13 +23,15 @@ export default function Cart() {
     )
 
     useEffect(() => {
-        setLocalPurchases(
-            createNextState(purchases, draft => {
+        setLocalPurchases(localPurchases => {
+            const localPurchasesObject = keyBy(localPurchases, '_id')
+            return createNextState(purchases, draft => {
                 draft.forEach(purchase => {
                     purchase.disabled = false
+                    purchase.checked = Boolean(localPurchasesObject[purchase._id]?.checked)
                 })
             })
-        )
+        })
     }, [purchases])
 
     const handleInputQuantity = indexPurchase => value => {
@@ -86,13 +91,45 @@ export default function Cart() {
         )
     }
 
-    console.log(localPurchases)
+    const handleCheck = indexPurchase => value => {
+        setLocalPurchases(localPurchases =>
+            createNextState(localPurchases, draft => {
+                draft[indexPurchase].checked = value
+            })
+        )
+    }
+
+    const isCheckAll = localPurchases.every(purchase => purchase.checked)
+    const checkedPurchases = localPurchases.filter(purchase => purchase.checked)
+
+    const totalCheckedPurchases = checkedPurchases.length
+
+    const totalCheckedPurchasesPrice = checkedPurchases.reduce((result, cur) => result + cur.price * cur.buy_count, 0)
+
+    const totalCheckedPurchasesSavingPrice = checkedPurchases.reduce(
+        (result, cur) => result + (cur.price_before_discount - cur.price) * cur.buy_count,
+        0
+    )
+
+    const handleCheckOn = () => {
+        setLocalPurchases(localPurchases =>
+            createNextState(localPurchases, draft => {
+                draft.forEach(purchase => {
+                    purchase.checked = !isCheckAll
+                })
+            })
+        )
+    }
+
+    console.log(checkedPurchases)
+    console.log(totalCheckedPurchasesPrice)
+    console.log(totalCheckedPurchasesSavingPrice)
     return (
         <div className='container'>
             <div>
                 <S.ProductHeader>
                     <S.ProductHeaderCheckbox>
-                        <Checkbox />
+                        <Checkbox onChange={handleCheckOn} checked={isCheckAll} />
                     </S.ProductHeaderCheckbox>
                     <S.ProductHeaderName>Sản phẩm</S.ProductHeaderName>
                     <S.ProductHeaderUnitPrice>Đơn giá</S.ProductHeaderUnitPrice>
@@ -105,14 +142,18 @@ export default function Cart() {
                         localPurchases.map((purchase, index) => (
                             <S.CartItem key={purchase._id}>
                                 <S.CartItemCheckbox>
-                                    <Checkbox />
+                                    <Checkbox checked={purchase.checked} onChange={handleCheck(index)} />
                                 </S.CartItemCheckbox>
                                 <S.CartItemOverview>
-                                    <S.CartItemOverviewImage to=''>
+                                    <S.CartItemOverviewImage to={path.product + `/${generateNameId(purchase.product)}`}>
                                         <img src={purchase.product.image} alt='' />
                                     </S.CartItemOverviewImage>
                                     <S.CartItemOverviewNameWrapper>
-                                        <S.CartItemOverviewName to=''>{purchase.product.name}</S.CartItemOverviewName>
+                                        <S.CartItemOverviewName
+                                            to={path.product + `/${generateNameId(purchase.product)}`}
+                                        >
+                                            {purchase.product.name}
+                                        </S.CartItemOverviewName>
                                     </S.CartItemOverviewNameWrapper>
                                 </S.CartItemOverview>
                                 <S.CartItemUnitPrice>
@@ -142,19 +183,19 @@ export default function Cart() {
             </div>
             <S.CartFooter>
                 <S.CartFooterCheckbox>
-                    <Checkbox />
+                    <Checkbox onChange={handleCheckOn} checked={isCheckAll} />
                 </S.CartFooterCheckbox>
-                <S.CartFooterButton>Chọn tất cả {localPurchases.length}</S.CartFooterButton>
+                <S.CartFooterButton>Chọn tất cả ({localPurchases.length})</S.CartFooterButton>
                 <S.CartFooterButton>Xóa</S.CartFooterButton>
                 <S.CartFooterSpaceBetween />
                 <S.CartFooterPrice>
                     <S.CartFooterPriceTop>
-                        <div>Tổng thanh toán (10 sản phẩm): </div>
-                        <div>đ500000</div>
+                        <div>Tổng thanh toán ({totalCheckedPurchases}): </div>
+                        <div>đ{formatMoney(totalCheckedPurchasesPrice)}</div>
                     </S.CartFooterPriceTop>
                     <S.CartFooterPriceBot>
                         <div>Tiết kiệm</div>
-                        <div>đ50000</div>
+                        <div>đ{formatMoney(totalCheckedPurchasesSavingPrice)}</div>
                     </S.CartFooterPriceBot>
                 </S.CartFooterPrice>
                 <S.CartFooterCheckout>Mua hàng</S.CartFooterCheckout>
