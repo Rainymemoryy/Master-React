@@ -6,13 +6,15 @@ import Checkbox from 'src/components/Checkbox/Checkbox'
 import ProductQuantityController from 'src/components/ProductQuantityController/ProductQuantityController'
 import { path } from 'src/constants/path'
 import { formatMoney, generateNameId } from 'src/untils/helper'
-import { getCartPurchases, updatePurchase } from './cart.slice'
+import { getCartPurchases, updatePurchase, deletePurchases, buyPurchases } from './cart.slice'
 import * as S from './cart.style'
 import keyBy from 'lodash/keyBy'
+import { toast } from 'react-toastify'
 
 export default function Cart() {
     const dispatch = useDispatch()
     const purchases = useSelector(state => state.cart.purchases)
+
     const [localPurchases, setLocalPurchases] = useState(() =>
         createNextState(purchases, draft => {
             draft.forEach(purchase => {
@@ -121,9 +123,46 @@ export default function Cart() {
         )
     }
 
-    console.log(checkedPurchases)
-    console.log(totalCheckedPurchasesPrice)
-    console.log(totalCheckedPurchasesSavingPrice)
+    const handleRemove = indexPurchase => async () => {
+        const purchase_id = localPurchases[indexPurchase]._id
+        await dispatch(deletePurchases([purchase_id])).then(unwrapResult)
+        await dispatch(getCartPurchases())
+            .then(unwrapResult)
+            .then(res => console.log(res))
+
+        toast.success('Xoá sản phẩm ra khỏi giỏ hàng', {
+            position: 'bottom-right',
+            autoClose: 2000
+        })
+    }
+
+    const handleRemoveManyPurchases = async () => {
+        const purchase_ids = checkedPurchases.map(purchase => purchase._id)
+        await dispatch(deletePurchases(purchase_ids)).then(unwrapResult)
+        await dispatch(getCartPurchases()).then(unwrapResult)
+
+        toast.success('Xoá sản phẩm ra khỏi giỏ hàng', {
+            position: 'bottom-right',
+            autoClose: 2000
+        })
+    }
+
+    const handleBuyPurchases = async () => {
+        if (checkedPurchases.length > 0) {
+            const body = checkedPurchases.map(purchase => ({
+                product_id: purchase.product._id,
+                buy_count: purchase.buy_count
+            }))
+            console.log(body)
+            await dispatch(buyPurchases(body)).then(unwrapResult)
+            await dispatch(getCartPurchases()).then(unwrapResult)
+
+            toast.success('Đặt đơn hàng thành công', {
+                position: 'bottom-right',
+                autoClose: 2000
+            })
+        }
+    }
     return (
         <div className='container'>
             <div>
@@ -175,7 +214,7 @@ export default function Cart() {
                                     <span>đ{formatMoney(purchase.product.price * purchase.buy_count)}</span>
                                 </S.CartItemTotalPrice>
                                 <S.CartItemAction>
-                                    <S.CartItemActionButton>Xóa</S.CartItemActionButton>
+                                    <S.CartItemActionButton onClick={handleRemove(index)}>Xóa</S.CartItemActionButton>
                                 </S.CartItemAction>
                             </S.CartItem>
                         ))}
@@ -186,7 +225,7 @@ export default function Cart() {
                     <Checkbox onChange={handleCheckOn} checked={isCheckAll} />
                 </S.CartFooterCheckbox>
                 <S.CartFooterButton>Chọn tất cả ({localPurchases.length})</S.CartFooterButton>
-                <S.CartFooterButton>Xóa</S.CartFooterButton>
+                <S.CartFooterButton onClick={handleRemoveManyPurchases}>Xóa</S.CartFooterButton>
                 <S.CartFooterSpaceBetween />
                 <S.CartFooterPrice>
                     <S.CartFooterPriceTop>
@@ -198,7 +237,7 @@ export default function Cart() {
                         <div>đ{formatMoney(totalCheckedPurchasesSavingPrice)}</div>
                     </S.CartFooterPriceBot>
                 </S.CartFooterPrice>
-                <S.CartFooterCheckout>Mua hàng</S.CartFooterCheckout>
+                <S.CartFooterCheckout onClick={handleBuyPurchases}>Mua hàng</S.CartFooterCheckout>
             </S.CartFooter>
         </div>
     )

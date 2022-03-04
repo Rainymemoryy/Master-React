@@ -5,6 +5,8 @@ import { logout } from '../Auth/auth.slice'
 
 export const getCartPurchases = createAsyncThunk('cart/getCartPurchases', payloadCreator(purchaseApi.getCardPurchases))
 export const updatePurchase = createAsyncThunk('cart/updatePurchase', payloadCreator(purchaseApi.updatePurchase))
+export const deletePurchases = createAsyncThunk('cart/deletePurchases', payloadCreator(purchaseApi.deletePurchases))
+export const buyPurchases = createAsyncThunk('cart/deletePurchases', payloadCreator(purchaseApi.buyPurchases))
 
 const cart = createSlice({
     name: 'cart',
