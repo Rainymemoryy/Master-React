@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Cart from './pages/Cart/Cart'
 import { path } from './constants/path'
 import AuthenticatedGuard from './guards/AuthenticatedGuard'
@@ -13,6 +13,9 @@ import Home from './pages/Home/Home'
 import NotFound from './pages/NotFound/NotFound'
 import ProductDetail from './pages/ProductDetail/ProductDetail'
 import User from './pages/User/User'
+import Password from './pages/User/Password/Password'
+import Profile from './pages/User/Profile/Profile'
+import Purchase from './pages/User/Purchase/Purchase'
 
 export default function RoutesA() {
     return (
@@ -58,7 +61,7 @@ export default function RoutesA() {
             ></Route>
 
             <Route
-                path={path.user}
+                path={path.user + '/*'}
                 element={
                     <AuthenticatedGuard>
                         <MainLayout>
@@ -66,7 +69,12 @@ export default function RoutesA() {
                         </MainLayout>
                     </AuthenticatedGuard>
                 }
-            ></Route>
+            >
+                <Route path='*' element={<Navigate to={path.user + path.profile} />}></Route>
+                <Route path={path.profile.slice(1)} element={<Profile />}></Route>
+                <Route path={path.password.slice(1)} element={<Password />}></Route>
+                <Route path={path.purchase.slice(1)} element={<Purchase />}></Route>
+            </Route>
 
             <Route
                 path={path.cart}

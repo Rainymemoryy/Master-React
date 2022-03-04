@@ -101,7 +101,8 @@ export default function Cart() {
         )
     }
 
-    const isCheckAll = localPurchases.every(purchase => purchase.checked)
+    const isCheckAll = localPurchases.length > 0 && localPurchases.every(purchase => purchase.checked)
+
     const checkedPurchases = localPurchases.filter(purchase => purchase.checked)
 
     const totalCheckedPurchases = checkedPurchases.length
