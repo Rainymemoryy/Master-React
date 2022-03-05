@@ -6,20 +6,16 @@ import Profile from './Profile/Profile'
 import Purchase from './Purchase/Purchase'
 import * as S from './user.style'
 export default function User() {
-    console.log(path.profile.slice(1))
-    console.log(path.password.slice(1))
-    console.log(path.purchase.slice(1))
-
     return (
         <div>
             <S.Container className='container'>
                 <S.Sidebar>
                     <S.Brief>
                         <S.BriefAvatar to={path.user + path.profile}>
-                            <img src='https://cf.shopee.vn/file/121fdee6ef0b3535084382fd0914185b_tn' alt='' />
+                            <img src='https://cf.shopee.vn/file/bbe4831308307c44b638058a3e735181_tn' alt='' />
                         </S.BriefAvatar>
                         <S.BriefRight>
-                            <S.BriefUsername>duoc081196</S.BriefUsername>
+                            <S.BriefUsername>khangkhang04</S.BriefUsername>
                             <S.BriefEdit to={path.user + path.profile}>
                                 <svg
                                     width={12}
