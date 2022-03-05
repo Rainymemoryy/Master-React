@@ -4,7 +4,6 @@ import * as S from '../Profile/profile.style'
 import { PasswordContent } from './password.style'
 
 export default function Password() {
-    console.log('Password')
     return (
         <S.Profile>
             <S.ProfileHeader>
