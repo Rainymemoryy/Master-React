@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Loading from './components/Loading/Loading'
+import Fallback from './components/Fallback/Fallback'
 
 import { path } from './constants/path'
 import AuthenticatedGuard from './guards/AuthenticatedGuard'
@@ -28,7 +28,7 @@ export default function RoutesA() {
                 path={path.home}
                 element={
                     <MainLayout>
-                        <Suspense fallback={<Loading />}>
+                        <Suspense fallback={<Fallback />}>
                             <Home />
                         </Suspense>
                     </MainLayout>
@@ -39,7 +39,7 @@ export default function RoutesA() {
                 path={path.productDetail}
                 element={
                     <MainLayout>
-                        <Suspense fallback={<Loading />}>
+                        <Suspense fallback={<Fallback />}>
                             <ProductDetail />
                         </Suspense>
                     </MainLayout>
@@ -51,7 +51,7 @@ export default function RoutesA() {
                 element={
                     <UnAuthenticatedGuard>
                         <RegisterLayout title={'Đăng nhập'}>
-                            <Suspense fallback={<Loading />}>
+                            <Suspense fallback={<Fallback />}>
                                 <Login />
                             </Suspense>
                         </RegisterLayout>
@@ -64,7 +64,7 @@ export default function RoutesA() {
                 element={
                     <UnAuthenticatedGuard>
                         <RegisterLayout title={'Đăng ký'}>
-                            <Suspense fallback={<Loading />}>
+                            <Suspense fallback={<Fallback />}>
                                 <Register />
                             </Suspense>
                         </RegisterLayout>
@@ -77,7 +77,7 @@ export default function RoutesA() {
                 element={
                     <AuthenticatedGuard>
                         <MainLayout>
-                            <Suspense fallback={<Loading />}>
+                            <Suspense fallback={<Fallback />}>
                                 <User />
                             </Suspense>
                         </MainLayout>
@@ -95,7 +95,7 @@ export default function RoutesA() {
                 element={
                     <AuthenticatedGuard>
                         <CartLayout>
-                            <Suspense fallback={<Loading />}>
+                            <Suspense fallback={<Fallback />}>
                                 <Cart />
                             </Suspense>
                         </CartLayout>
