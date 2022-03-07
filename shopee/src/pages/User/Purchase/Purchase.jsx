@@ -8,6 +8,7 @@ import { formatMoney, generateNameId } from 'src/untils/helper'
 import { getPurchase } from '../user.slice'
 import * as S from './purchase.style'
 import qs from 'query-string'
+import Helmet from 'react-helmet'
 
 export default function Purchase() {
     const [purchases, setPurchases] = useState([])
@@ -26,6 +27,9 @@ export default function Purchase() {
 
     return (
         <div>
+            <Helmet>
+                <title>Đơn đặt hàng</title>
+            </Helmet>
             <S.PurchaseTabs>
                 <S.PurchaseTabItem
                     to={path.user + path.purchase}

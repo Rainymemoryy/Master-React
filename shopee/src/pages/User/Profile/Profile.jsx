@@ -12,6 +12,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 import { updateMe } from 'src/pages/Auth/auth.slice'
 import http from 'src/untils/http'
+import Helmet from 'react-helmet'
 
 export default function Profile() {
     const profile = useSelector(state => state.auth.profile)
@@ -71,6 +72,9 @@ export default function Profile() {
 
     return (
         <S.Profile>
+            <Helmet>
+                <title>Tài khoản của tôi</title>
+            </Helmet>
             <S.ProfileHeader>
                 <S.ProfileHeaderTitle>Hồ sơ của tôi</S.ProfileHeaderTitle>
                 <S.ProfileHeaderSubtitle>Quản lý thông tin profile để bảo mật tài khoản</S.ProfileHeaderSubtitle>

@@ -1,5 +1,6 @@
 import { unwrapResult } from '@reduxjs/toolkit'
 import React from 'react'
+import Helmet from 'react-helmet'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
@@ -53,6 +54,9 @@ export default function Password() {
     }
     return (
         <S.Profile>
+            <Helmet>
+                <title>Cập nhật bảo mật</title>
+            </Helmet>
             <S.ProfileHeader>
                 <S.ProfileHeaderTitle>Đổi mật khẩu</S.ProfileHeaderTitle>
                 <S.ProfileHeaderSubtitle>

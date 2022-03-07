@@ -10,6 +10,7 @@ import { getCartPurchases, updatePurchase, deletePurchases, buyPurchases } from 
 import * as S from './cart.style'
 import keyBy from 'lodash/keyBy'
 import { toast } from 'react-toastify'
+import Helmet from 'react-helmet'
 
 export default function Cart() {
     const dispatch = useDispatch()
@@ -166,6 +167,9 @@ export default function Cart() {
     }
     return (
         <div className='container'>
+            <Helmet>
+                <title>Giỏ hàng</title>
+            </Helmet>
             <div>
                 <S.ProductHeader>
                     <S.ProductHeaderCheckbox>
