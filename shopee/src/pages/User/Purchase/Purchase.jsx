@@ -1,7 +1,10 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import * as S from './purchase.style'
 
 export default function Purchase() {
+    const profile = useSelector(state => state.auth.profile)
+    console.log(profile)
     return (
         <div>
             <S.PurchaseTabs>

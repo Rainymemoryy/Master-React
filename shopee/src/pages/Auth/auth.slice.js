@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import authApi from 'src/api/auth.api'
+import userApi from 'src/api/user.api'
 import LocalStorage from 'src/constants/localStorage'
 import { payloadCreator } from 'src/untils/helper'
 
 export const register = createAsyncThunk('auth/register', payloadCreator(authApi.register))
 export const login = createAsyncThunk('auth/login', payloadCreator(authApi.login))
 export const logout = createAsyncThunk('auth/logout', payloadCreator(authApi.logout))
+export const updateMe = createAsyncThunk('auth/updateMe', payloadCreator(userApi.updateMe))
 
 const handleUnauth = state => {
     state.profile = {}
@@ -31,7 +33,11 @@ const auth = createSlice({
     extraReducers: {
         [register.fulfilled]: handleAuthFulfilled,
         [login.fulfilled]: handleAuthFulfilled,
-        [logout.fulfilled]: handleUnauth
+        [logout.fulfilled]: handleUnauth,
+        [updateMe.fulfilled]: (state, action) => {
+            state.profile = action.payload.data
+            localStorage.setItem(LocalStorage.user, JSON.stringify(state.profile))
+        }
     }
 })
 

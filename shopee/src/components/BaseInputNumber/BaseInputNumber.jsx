@@ -14,6 +14,7 @@ export default function BaseInputNumber({ onChange, value, onBlur, ...props }) {
         const val = event.target.value
         onBlur && onBlur(val)
     }
+
     return <input type='text' onChange={handleChange} value={value} onBlur={handleBlur} {...props} />
 }
 
