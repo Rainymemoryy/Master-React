@@ -1,21 +1,25 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Cart from './pages/Cart/Cart'
+import Loading from './components/Loading/Loading'
+
 import { path } from './constants/path'
 import AuthenticatedGuard from './guards/AuthenticatedGuard'
 import UnAuthenticatedGuard from './guards/UnAuthenticatedGuard'
 import CartLayout from './layouts/CartLayout/CartLayout'
 import MainLayout from './layouts/MainLayout/MainLayout'
 import RegisterLayout from './layouts/RegisterLayout/RegisterLayout'
-import Login from './pages/Auth/Login/Login'
-import Register from './pages/Auth/Register/Register'
-import Home from './pages/Home/Home'
-import NotFound from './pages/NotFound/NotFound'
-import ProductDetail from './pages/ProductDetail/ProductDetail'
-import User from './pages/User/User'
+
 import Password from './pages/User/Password/Password'
 import Profile from './pages/User/Profile/Profile'
 import Purchase from './pages/User/Purchase/Purchase'
+
+const Home = lazy(() => import('./pages/Home/Home'))
+const ProductDetail = lazy(() => import('./pages/ProductDetail/ProductDetail'))
+const User = lazy(() => import('./pages/User/User'))
+const Cart = lazy(() => import('./pages/Cart/Cart'))
+const Register = lazy(() => import('./pages/Auth/Register/Register'))
+const Login = lazy(() => import('./pages/Auth/Login/Login'))
+const NotFound = lazy(() => import('./pages/NotFound/NotFound'))
 
 export default function RoutesA() {
     return (
@@ -24,7 +28,9 @@ export default function RoutesA() {
                 path={path.home}
                 element={
                     <MainLayout>
-                        <Home />
+                        <Suspense fallback={<Loading />}>
+                            <Home />
+                        </Suspense>
                     </MainLayout>
                 }
             ></Route>
@@ -33,7 +39,9 @@ export default function RoutesA() {
                 path={path.productDetail}
                 element={
                     <MainLayout>
-                        <ProductDetail />
+                        <Suspense fallback={<Loading />}>
+                            <ProductDetail />
+                        </Suspense>
                     </MainLayout>
                 }
             ></Route>
@@ -43,7 +51,9 @@ export default function RoutesA() {
                 element={
                     <UnAuthenticatedGuard>
                         <RegisterLayout title={'Đăng nhập'}>
-                            <Login></Login>
+                            <Suspense fallback={<Loading />}>
+                                <Login />
+                            </Suspense>
                         </RegisterLayout>
                     </UnAuthenticatedGuard>
                 }
@@ -54,7 +64,9 @@ export default function RoutesA() {
                 element={
                     <UnAuthenticatedGuard>
                         <RegisterLayout title={'Đăng ký'}>
-                            <Register></Register>
+                            <Suspense fallback={<Loading />}>
+                                <Register />
+                            </Suspense>
                         </RegisterLayout>
                     </UnAuthenticatedGuard>
                 }
@@ -65,7 +77,9 @@ export default function RoutesA() {
                 element={
                     <AuthenticatedGuard>
                         <MainLayout>
-                            <User />
+                            <Suspense fallback={<Loading />}>
+                                <User />
+                            </Suspense>
                         </MainLayout>
                     </AuthenticatedGuard>
                 }
@@ -81,7 +95,9 @@ export default function RoutesA() {
                 element={
                     <AuthenticatedGuard>
                         <CartLayout>
-                            <Cart />
+                            <Suspense fallback={<Loading />}>
+                                <Cart />
+                            </Suspense>
                         </CartLayout>
                     </AuthenticatedGuard>
                 }

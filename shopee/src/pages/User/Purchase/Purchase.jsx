@@ -1,6 +1,6 @@
 import { unwrapResult } from '@reduxjs/toolkit'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { path } from 'src/constants/path'
 import { purchaseStatus } from 'src/constants/status'
 import useQuery from 'src/hooks/useQuery'
