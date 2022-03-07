@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import purchaseApi from 'src/api/pruchase.api'
+import purchaseApi from 'src/api/purchase.api'
 import { payloadCreator } from 'src/untils/helper'
 import { logout } from '../Auth/auth.slice'
 
